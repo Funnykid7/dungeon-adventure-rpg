@@ -4,6 +4,12 @@ import time
 import json
 import os
 import sys
+
+# Import custom modules
+from src.entities import classes, weapons
+from src.data_manager import save_game, load_game, slow
+from src.utils import divider, sound, load_img
+
 # ================= COMBAT LOG =================
 battle_messages = []
 waiting_for_input = False
@@ -11,8 +17,8 @@ waiting_for_input = False
 #================== MISC =======================
 pygame.init()
 pygame.mixer.init()
-BATTLE_MUSIC = "battle_music.mp3"
-EXPLORE_MUSIC = "game_world.mp3"
+BATTLE_MUSIC = "assets/audio/battle_music.mp3"
+EXPLORE_MUSIC = "assets/audio/game_world.mp3"
 
 SAVE_FILE = "dungeon_save.json"
 MAP_SIZE = 5
@@ -46,31 +52,7 @@ door_zones = {
     "right": pygame.Rect(876, 216, 48, 96),
 }
 
-
-
-
 # ================= UTILITIES =================
-
-def slow(text, d=0.02):
-    for c in text:
-        print(c, end="", flush=True)
-        time.sleep(d)
-    print()
-
-def divider():
-    print("\n" + "=" * 60)
-
-def sound(kind):
-    sounds = {
-        "attack": "\a",
-        "hit": "\a\a",
-        "block": "\a",
-        "heal": "\a\a",
-        "level": "\a\a\a",
-        "boss": "\a\a\a\a",
-        "death": "\a\a\a\a\a"
-    }
-    print(sounds.get(kind, ""), end="", flush=True)
 
 def play_explore_music():
     if pygame.mixer.music.get_busy():
@@ -315,16 +297,6 @@ def weapon_shop_gui(player):
 def create_map():
     return [["?" for _ in range(MAP_SIZE)] for _ in range(MAP_SIZE)]
 
-def draw_map(dmap, px, py, floor):
-    divider()
-    slow(f"🗺️ FLOOR {floor}")
-    for y in range(MAP_SIZE):
-        row = ""
-        for x in range(MAP_SIZE):
-            row += "@ " if (x == px and y == py) else dmap[y][x] + " "
-        print(row)
-    divider()
-
 def move_player(px, py):
     move = input("Move (W/A/S/D): ").lower()
     if move == "w" and py > 0: py -= 1
@@ -350,66 +322,6 @@ def get_room(room_pos, floor):
         else:
             visited_rooms[room_pos] = "enemy"
     return visited_rooms[room_pos]
-
-# ================= CLASSES =================
-
-classes = {
-    "warrior": {
-        "desc": "Tank fighter. Takes reduced damage.",
-        "hp": 150,
-        "attack": (12, 18)
-    },
-    "mage": {
-        "desc": "Glass cannon. Upper attacks deal more damage.",
-        "hp": 95,
-        "attack": (16, 26)
-    },
-    "rogue": {
-        "desc": "Agile assassin. High dodge chance.",
-        "hp": 115,
-        "attack": (10, 22)
-    },
-    "paladin": {
-        "desc": "Holy warrior. Heals slightly every turn.",
-        "hp": 160,
-        "attack": (11, 17)
-    },
-    "ranger": {
-        "desc": "Precision striker. Critical hits possible.",
-        "hp": 120,
-        "attack": (13, 21)
-    },
-    "monk": {
-        "desc": "Martial artist. Strong combo attacks.",
-        "hp": 110,
-        "attack": (14, 20)
-    }
-}
-
-positions = ["upper", "middle", "lower"]
-
-weapons = {
-    "Dagger": {"bonus": 3, "price": 30},
-    "Sword": {"bonus": 6, "price": 60},
-    "Axe": {"bonus": 9, "price": 90},
-    "Magic Staff": {"bonus": 12, "price": 120},
-    "Royal Claymore": {"bonus": 18, "price": 250},
-    "Spear of the Sheik": {"bonus": 26, "price": 400}
-}
-
-# ================= SAVE / LOAD =================
-
-def save_game(player):
-    with open(SAVE_FILE, "w") as f:
-        json.dump(player, f)
-    slow("💾 Game saved.")
-
-def load_game():
-    if os.path.exists(SAVE_FILE):
-        with open(SAVE_FILE, "r") as f:
-            slow("📂 Save loaded.")
-            return json.load(f)
-    return None
 
 # ================= PLAYER =================
 
@@ -694,20 +606,6 @@ def fight(player, enemy):
         cmd_surface = font.render(command_text, True, (255, 220, 120))
         screen.blit(cmd_surface, (24, SCREEN_H - 32))
 
-
-
-
-
-
-
-#         screen.blit(font.render(f"HP: {player['hp']}", True, (255,255,255)), (180,230))
-#         screen.blit(font.render(f"HP: {enemy['hp']}", True, (255,80,80)), (580,210))
-#         controls = "1-Upper  2-Middle  3-Lower   H-Heal   S-Str   D-Def"
-#         screen.blit(font.render(controls, True, (255, 220, 0)), (20, 540))
-
-
-
-
         pygame.display.flip()
 
         if player["hp"] <= 0 and divine_intervention(player):
@@ -734,38 +632,6 @@ def fight(player, enemy):
 
 
 # ================= ROOMS =================
-
-def merchant(player):
-    slow("🏪 Merchant appears.")
-    while True:
-        slow(f"Gold: {player['gold']}")
-        slow("1. Healing Potion (25g)")
-        slow("2. Strength Potion (200g)")
-        slow("3. Defense Potion (200g)")
-        slow("4. Weapons")
-        slow("5. Leave")
-        c = input("> ")
-
-        if c == "1" and player["gold"] >= 25:
-            player["gold"] -= 25
-            player["potions"] += 1
-        elif c == "2" and player["gold"] >= 200:
-            player["gold"] -= 200
-            player["strength_potions"] += 1
-        elif c == "3" and player["gold"] >= 200:
-            player["gold"] -= 200
-            player["defense_potions"] += 1
-        elif c == "4":
-            for i, w in enumerate(weapons, 1):
-                slow(f"{i}. {w} | Damage +{weapons[w]['bonus']} | {weapons[w]['price']}g")
-            pick = input("> ")
-            if pick.isdigit():
-                w = list(weapons.keys())[int(pick) - 1]
-                if player["gold"] >= weapons[w]["price"]:
-                    player["gold"] -= weapons[w]["price"]
-                    player["weapon"] = w
-        else:
-            return
 
 def trap(player):
     slow("🕳️ Trap!")
@@ -807,9 +673,6 @@ pygame.display.set_caption("Dungeon Battle")
 clock = pygame.time.Clock()
 
 # ================= OVERWORLD SPRITES =================
-
-def load_img(path):
-    return pygame.image.load(path).convert_alpha()
 
 player_sprites = {
     "up": {
@@ -878,7 +741,7 @@ big_font = pygame.font.Font(FONT_PATH, 48)
 small_font = pygame.font.Font(FONT_PATH, 18)
 
 
-player = load_game() if input("Load game? (y/n): ").lower() == "y" else create_player()
+player = load_game(SAVE_FILE) if input("Load game? (y/n): ").lower() == "y" else create_player()
 play_explore_music()
 
 while player["hp"] > 0:
@@ -940,9 +803,6 @@ while player["hp"] > 0:
             })
             break
 
-
-
-
     slow(
         f"❤️ {player['hp']} | 🧪 {player['potions']} | "
         f"💪 {player['strength_potions']} | "
@@ -950,9 +810,6 @@ while player["hp"] > 0:
         f"⭐ {player['level']} | 💰 {player['gold']}"
     )
 
-
-
 divider()
 slow("✨ Thanks for playing Dungeon Adventure!")
 stop_music()
-
