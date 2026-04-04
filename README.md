@@ -1,6 +1,6 @@
-# 🏰 Dungeon Adventure RPG
+# Dungeon Adventure RPG
 
-A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural dungeon, level up your hero, and face off against the powerful Dungeon Lord.
+A graphical, turn-based RPG built with **Pygame-ce**. Explore a procedural dungeon, level up your hero, and face off against the powerful Dungeon Lord.
 
 ---
 
@@ -50,10 +50,10 @@ The `legacy/` directory contains the evolutionary steps of this project:
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 **Pokemon Assets**: This project currently uses a small number of sound and sprite assets from *Pokemon LeafGreen* (Nintendo/The Pokémon Company) for placeholder purposes. These assets are **not** for commercial use. If you plan to redistribute this game widely, please replace these with open-source alternatives.
 
 ---
 
-## 🛡️ License
+## License
 This project is licensed under the MIT License—feel free to use it for your own learning and development!
