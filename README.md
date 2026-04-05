@@ -50,12 +50,12 @@ The `legacy/` directory contains the evolutionary steps of this project:
 
 ---
 
-## ⚠️ Disclaimer
+##  Disclaimer
 **Incomplete Development** This project aims to give a complete and distinct rpg experience. But some features and graphical elements arent fully implemented. If anyone has suggestions please send an email or a pull request. 
 
 **Pokemon Assets**: This project currently uses a small number of sound and sprite assets from *Pokemon LeafGreen* (Nintendo/The Pokémon Company) for placeholder purposes. These assets are **not** for commercial use. If you plan to redistribute this game widely, please replace these with open-source alternatives.
 
 ---
 
-## 🛡️ License
+##  License
 This project is licensed under the MIT License—feel free to use it for your own learning and development!
