@@ -15,7 +15,7 @@ classes = {
         "attack": (10, 22)
     },
     "paladin": {
-        "desc": "Holy warrior. Heals slightly every turn.",
+        "desc": "Holy warrior. Chance to heal every turn.",
         "hp": 160,
         "attack": (11, 17)
     },
