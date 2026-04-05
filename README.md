@@ -30,7 +30,7 @@ A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural
 ## 🛠️ Installation & Setup
 
 1. **Prerequisites**: Make sure you have [Python 3](https://www.python.org/) installed.
-2. **Clone the repository** (or download the files).
+2. **Clone the repository** (or download the files by clicking code - download as zip).
 3. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
