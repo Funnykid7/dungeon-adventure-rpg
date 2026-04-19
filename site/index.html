@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Adventure RPG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Ambient magical aura in the background -->
+    <div class="ambient-glow cyan"></div>
+    <div class="ambient-glow purple"></div>
+
+    <nav class="glass-nav">
+        <div class="logo">DUNGEON ADVENTURE</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#status">Status</a></li>
+            <li><a href="#contribute">Contribute</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="hero" class="glass-hero">
+            <h1 class="glow-text">Dungeon Adventure RPG</h1>
+            <p>A visually immersive, turn-based RPG dungeon crawler built with Python and Pygame.</p>
+            <div class="hero-buttons">
+                <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/archive/refs/heads/main.zip" class="btn primary-btn glow-btn">Download Main</a>
+                <a href="https://github.com/Funnykid7/dungeon-adventure-rpg" target="_blank" class="btn secondary-btn glass-btn">GitHub Repo</a>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2 class="section-title">Quest Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card glass-card">
+                    <div class="icon">⚔️</div>
+                    <h3>6 Playable Classes</h3>
+                    <p>Choose your hero: Warrior, Mage, Rogue, Paladin, Ranger, or Monk. Each path features unique stats and special passives.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">🎲</div>
+                    <h3>Tactical Combat</h3>
+                    <p>Experience deep, turn-based battles. Utilize upper, middle, and lower attacks alongside critical hits and combos.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">🗺️</div>
+                    <h3>Procedural Paths</h3>
+                    <p>Explore an ever-changing overworld. Traverse rooms filled with enemies, merchants, traps, and ancient shrines.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">💰</div>
+                    <h3>Treasure & Trade</h3>
+                    <p>Amass gold to trade with dungeon merchants. Stock up on vital potions or wield the legendary Royal Claymore.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">💾</div>
+                    <h3>Persistent Progress</h3>
+                    <p>The dungeon never forgets. Use the integrated save/load system to continue your adventure whenever duty calls.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">🕹️</div>
+                    <h3>Graphical Evolution</h3>
+                    <p>A journey from text-based CLI to a fully immersive Pygame graphical interface with custom UI elements.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="status" class="glass-panel">
+            <h2 class="section-title">Development Status</h2>
+            <div class="status-content">
+                <div class="status-badge">
+                    <div class="pulse-indicator"></div>
+                    <span>Active Development (BETA)</span>
+                </div>
+                <p>The game is undergoing continuous refinement. While currently in an incomplete development stage, it offers a distinct and playable RPG experience. Community feedback is vital to our journey!</p>
+                
+                <h3 class="status-subtitle">Evolutionary Roadmap</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="dot"></div>
+                        <div class="info">
+                            <strong>Revision 1: The Foundation</strong>
+                            <span>Pure CLI logic and text-based dungeon crawling.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="dot"></div>
+                        <div class="info">
+                            <strong>Revision 2: Atmosphere</strong>
+                            <span>Added original audio tracks and refined class passives.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="dot active"></div>
+                        <div class="info">
+                            <strong>Revision 3: The Vision (Current)</strong>
+                            <span>Full graphical overhaul using Pygame with immersive UI.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contribute" class="glass-panel">
+            <h2 class="section-title">Join the Adventure</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-target="how-to">How to Help</button>
+                <button class="tab-btn" data-target="issues-list">Bounty Board (Issues)</button>
+            </div>
+            
+            <div class="tab-content active" id="how-to">
+                <p>Dungeon Adventure is an open-source project under the MIT License. We value every contributor's spark!</p>
+                <div class="contribution-cards">
+                    <div class="contrib-card glass-card">
+                        <h4>🎨 Asset Renewal</h4>
+                        <p>We are currently looking for original, open-source sprites and sound effects to replace placeholder assets.</p>
+                        <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/pulls" target="_blank" class="btn glass-btn">Submit Assets</a>
+                    </div>
+                    <div class="contrib-card glass-card">
+                        <h4>🛠️ Bug Hunting</h4>
+                        <p>Spotted a glitch in the dungeon? Report bugs or suggest new features via our GitHub issue tracker.</p>
+                        <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/issues/new" target="_blank" class="btn glass-btn">Report Issue</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="issues-list">
+                <div id="github-issues-container" class="issues-scroll">
+                    <div class="loader"></div>
+                    <p>Consulting the GitHub scrolls...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="glass-footer">
+        <p>&copy; 2024 Dungeon Adventure RPG Team. Licensed under <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/blob/main/LICENSE" target="_blank">MIT</a>.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
