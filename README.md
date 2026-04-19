@@ -4,6 +4,12 @@ A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural
 
 ---
 
+## Visit the website!
+   Visit the all new website for a simpler explanation for the game.
+   https://funnykid7.github.io/dungeon-adventure-rpg/
+
+---
+
 ## Features
 - **6 Playable Classes**: Warrior, Mage, Rogue, Paladin, Ranger, and Monk—each with unique passives and stats.
 - **Dynamic Combat**: A turn-based system featuring critical hits, combos, and healing.
