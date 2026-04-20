@@ -21,6 +21,10 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
     player_flash_timer = 0
     enemy_flash_timer = 0
 
+    # Pre-render optimized sprites for performance
+    player_flash_img = flash_sprite_func(player_img)
+    enemy_tint_img = tint_sprite_func(enemy_img, (180, 0, 0))
+
     running = True
     action = None
     attack_pos = None
@@ -117,13 +121,13 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
         # Draw
         screen.blit(battle_bg, (0, 0))
         if player_flash_timer > 0:
-            screen.blit(flash_sprite_func(player_img), (120, 200))
+            screen.blit(player_flash_img, (120, 200))
             player_flash_timer -= 1
         else:
             screen.blit(player_img, (120, 200))
 
         if enemy_flash_timer > 0:
-            screen.blit(tint_sprite_func(enemy_img, (180, 0, 0)), (600, 80))
+            screen.blit(enemy_tint_img, (600, 80))
             enemy_flash_timer -= 1
         else:
             screen.blit(enemy_img, (600, 80))

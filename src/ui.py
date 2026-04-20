@@ -23,7 +23,7 @@ def draw_hud(screen, player, small_font):
     for stat in stats:
         txt = small_font.render(stat, True, (255, 255, 255))
         screen.blit(txt, (x_pos, 15))
-        x_pos += 140
+        x_pos += txt.get_width() + 40
     
     # Save Hint
     save_txt = small_font.render("HOME: Save", True, (255, 215, 0))
@@ -57,10 +57,18 @@ def show_msg(screen, text, font, small_font, clock):
         pygame.display.flip()
         clock.tick(60)
 
-def draw_minimap(screen, visited_rooms, current_room, small_font):
+def draw_minimap(screen, player, visited_rooms, current_room, small_font):
     """Draws a 5x5 grid in the corner showing explored rooms."""
     MAP_X, MAP_Y = SCREEN_W - 160, SCREEN_H - 160
     CELL_SIZE = 25
+    
+    # Track discovered rooms in player data (as list for JSON compatibility)
+    if "discovered" not in player:
+        player["discovered"] = []
+    
+    disc_list = player["discovered"]
+    if current_room not in disc_list and list(current_room) not in disc_list:
+        disc_list.append(current_room)
     
     # Draw Background
     bg_rect = pygame.Rect(MAP_X - 10, MAP_Y - 10, (CELL_SIZE * 5) + 20, (CELL_SIZE * 5) + 40)
@@ -76,26 +84,29 @@ def draw_minimap(screen, visited_rooms, current_room, small_font):
             
             # Room Status
             room_data = visited_rooms.get((x, y))
+            is_disc = (x, y) in disc_list or list((x, y)) in disc_list
             
             if (x, y) == current_room:
                 color = (255, 255, 0) # Player Current - Yellow
-            elif room_data == "cleared":
-                color = (80, 80, 80) # Visited/Cleared - Gray
+            elif is_disc:
+                color = (100, 100, 100) if room_data != "cleared" else (60, 60, 60)
             else:
                 color = (30, 30, 30) # Unvisited - Dark
                 
             pygame.draw.rect(screen, color, rect)
             
-            # Show icons
-            txt = ""
-            if room_data == "merchant": txt = "M"
-            elif room_data == "exit": txt = "E"
-            elif room_data == "boss": txt = "B"
-            elif room_data == "shrine": txt = "S"
-                
-            if txt and (x, y) == current_room:
-                char = small_font.render(txt, True, (0, 0, 0))
-                screen.blit(char, (rect.x + 5, rect.y + 2))
+            # Show icons for discovered rooms
+            if is_disc:
+                txt = ""
+                if room_data == "merchant": txt = "M"
+                elif room_data == "exit": txt = "E"
+                elif room_data == "boss": txt = "B"
+                elif room_data == "shrine": txt = "S"
+                    
+                if txt:
+                    txt_color = (0, 0, 0) if (x, y) == current_room else (255, 255, 255)
+                    char = small_font.render(txt, True, txt_color)
+                    screen.blit(char, (rect.x + 5, rect.y + 2))
 
 def start_screen(screen, big_font, font, small_font, SAVE_FILE, load_game_func, intro_gui_func, show_msg_func, clock):
     """Initial screen to New Game or Load Game."""
@@ -294,6 +305,7 @@ def intro_gui(screen, big_font, font, small_font, clock):
         "weapon": "Dagger",
         "floor": 1,
         "rooms": 0,
+        "discovered": [],
         "revived": False,
         "map": None,
         "last_attack": None
@@ -365,7 +377,9 @@ def merchant_gui(screen, player, merchant_bg, font, small_font, show_msg_func, c
                     if menu_mode == "weapons":
                         if idx < len(weapon_items):
                             name, data = weapon_items[idx]
-                            if player["gold"] >= data["price"]:
+                            if data["bonus"] <= weapons[player["weapon"]]["bonus"]:
+                                show_msg_func(screen, "❌ This weapon is not an upgrade!", font, small_font, clock)
+                            elif player["gold"] >= data["price"]:
                                 player["gold"] -= data["price"]
                                 player["weapon"] = name
                                 show_msg_func(screen, f"⚔️ Purchased {name}!", font, small_font, clock)

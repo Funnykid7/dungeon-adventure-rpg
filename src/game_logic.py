@@ -43,8 +43,8 @@ def divine_intervention(player, show_msg_func, screen, font, small_font, clock):
 
 def gain_xp(player, amount, show_msg_func, screen, font, small_font, clock):
     player["xp"] += amount
-    if player["xp"] >= player["level"] * 60:
-        player["xp"] = 0
+    while player["xp"] >= player["level"] * 60:
+        player["xp"] -= player["level"] * 60
         player["level"] += 1
         player["max_hp"] += 10
         player["hp"] = player["max_hp"]

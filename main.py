@@ -91,9 +91,13 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     use_potion(player, show_msg, screen, font, small_font, clock)
+                if event.key == pygame.K_7:
+                    use_strength_potion(player, show_msg, screen, font, small_font, clock)
+                if event.key == pygame.K_8:
+                    use_defense_potion(player, show_msg, screen, font, small_font, clock)
                 if event.key == pygame.K_HOME:
-                    player["_current_room"] = current_room
-                    player["_visited_rooms"] = {str(k): v for k, v in visited_rooms.items()}
+                    player["_current_room"] = list(current_room)
+                    player["_visited_rooms"] = {f"{k[0]},{k[1]}": v for k, v in visited_rooms.items()}
                     player["_player_world_x"] = player_world_x
                     player["_player_world_y"] = player_world_y
                     save_game(player, SAVE_FILE)
@@ -146,7 +150,7 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
 
         screen.blit(sprite, (player_world_x, player_world_y))
         draw_hud(screen, player, small_font)
-        draw_minimap(screen, visited_rooms, current_room, small_font)
+        draw_minimap(screen, player, visited_rooms, current_room, small_font)
         pygame.display.flip()
 
     return get_room(current_room, visited_rooms)
