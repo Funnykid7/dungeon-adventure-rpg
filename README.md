@@ -5,7 +5,7 @@ A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural
 ---
 
 ## Visit the website!
-   Visit the all new website for a simpler explanation for the game.
+   Visit the all new website for more info
    https://funnykid7.github.io/dungeon-adventure-rpg/
 
 ---
