@@ -91,7 +91,7 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     use_potion(player, show_msg, screen, font, small_font, clock)
-                if event.key == pygame.K_s or event.key == pygame.K_HOME:
+                if event.key == pygame.K_HOME:
                     player["_current_room"] = current_room
                     player["_visited_rooms"] = {str(k): v for k, v in visited_rooms.items()}
                     player["_player_world_x"] = player_world_x

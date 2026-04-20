@@ -4,28 +4,31 @@ from src.utils import sound
 def use_potion(player, show_msg_func, screen, font, small_font, clock, in_combat=False):
     if player.get("potions", 0) <= 0:
         if not in_combat: show_msg_func(screen, "❌ No potions left.", font, small_font, clock)
-        return
+        return False
     heal = 40
     player["potions"] -= 1
     player["hp"] = min(player["max_hp"], player["hp"] + heal)
     sound("heal")
     if not in_combat: show_msg_func(screen, f"🧪 Healed {heal} HP.", font, small_font, clock)
+    return True
 
 def use_strength_potion(player, show_msg_func, screen, font, small_font, clock, in_combat=False):
     if player.get("strength_potions", 0) <= 0:
         if not in_combat: show_msg_func(screen, "❌ No strength potions.", font, small_font, clock)
-        return
+        return False
     player["strength_potions"] -= 1
     player["strength_turns"] = 5
     if not in_combat: show_msg_func(screen, "💪 Strength increased for 5 turns!", font, small_font, clock)
+    return True
 
 def use_defense_potion(player, show_msg_func, screen, font, small_font, clock, in_combat=False):
     if player.get("defense_potions", 0) <= 0:
         if not in_combat: show_msg_func(screen, "❌ No defense potions.", font, small_font, clock)
-        return
+        return False
     player["defense_potions"] -= 1
     player["defense_turns"] = 5
     if not in_combat: show_msg_func(screen, "🛡️ Defense increased for 5 turns!", font, small_font, clock)
+    return True
 
 def divine_intervention(player, show_msg_func, screen, font, small_font, clock):
     if player.get("revived"):

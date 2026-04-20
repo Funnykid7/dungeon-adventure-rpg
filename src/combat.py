@@ -54,17 +54,17 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
                     attack_pos = "lower"
                     battle_messages.append("You used LOWER attack!")
                 elif event.key == pygame.K_4:
-                    use_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True)
-                    action = "potion"
-                    battle_messages.append("You used a potion!")
+                    if use_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True):
+                        action = "potion"
+                        battle_messages.append("You used a potion!")
                 elif event.key == pygame.K_5:
-                    use_strength_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True)
-                    action = "potion"
-                    battle_messages.append("💪 Strength boosted!")
+                    if use_strength_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True):
+                        action = "potion"
+                        battle_messages.append("💪 Strength boosted!")
                 elif event.key == pygame.K_6:
-                    use_defense_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True)
-                    action = "potion"
-                    battle_messages.append("🛡️ Defense boosted!")
+                    if use_defense_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True):
+                        action = "potion"
+                        battle_messages.append("🛡️ Defense boosted!")
 
                 if not battle_messages:
                     waiting_for_input = False
