@@ -20,7 +20,7 @@ EXPLORE_MUSIC = "assets/audio/game_world.mp3"
 
 # Door Zones
 door_zones = {
-    "up": pygame.Rect(432, 36, 96, 48),
+    "up": pygame.Rect(432, 85, 96, 48),
     "down": pygame.Rect(432, 456, 96, 48),
     "left": pygame.Rect(36, 216, 48, 96),
     "right": pygame.Rect(876, 216, 48, 96),

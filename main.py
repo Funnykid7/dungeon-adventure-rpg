@@ -42,7 +42,8 @@ def stop_music():
 
 # ================= GAME SYSTEMS =================
 
-def trap(player, screen, font, small_font, clock):
+def trap(player, screen, font, small_font, clock, trap_bg):
+    screen.blit(trap_bg, (0, 0))
     show_msg(screen, "🕳️ A hidden trap activates!", font, small_font, clock)
     if random.random() < 0.5:
         show_msg(screen, "💨 You managed to dodge it!", font, small_font, clock)
@@ -53,7 +54,8 @@ def trap(player, screen, font, small_font, clock):
         show_msg(screen, f"💥 Trap hits you for {dmg} damage!", font, small_font, clock)
     visited_rooms[current_room] = "cleared"
 
-def shrine(player, screen, font, small_font, clock):
+def shrine(player, screen, font, small_font, clock, shrine_bg):
+    screen.blit(shrine_bg, (0, 0))
     heal = random.randint(30, 45)
     player["hp"] = min(player["max_hp"], player["hp"] + heal)
     sound("heal")
@@ -63,6 +65,8 @@ def shrine(player, screen, font, small_font, clock):
 def next_floor(player, screen, font, small_font, clock):
     global player_world_x, player_world_y, current_room
     show_msg(screen, f"⬇️ Descending to floor {player['floor'] + 1}...", font, small_font, clock)
+    from src.ui import fade_screen
+    fade_screen(screen, clock, 'out', speed=8)
     player["floor"] += 1
     player["rooms"] = 0
     current_room = (0, 0)
@@ -73,7 +77,7 @@ def next_floor(player, screen, font, small_font, clock):
 def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
     global player_world_x, player_world_y, current_room, door_cooldown, entry_dir
     door_cooldown = DOOR_COOLDOWN_TIME
-    player_speed = 4
+    player_speed = 5
     player_dir = "down"
     player_frame = 0
     player_anim_timer = 0
@@ -91,6 +95,10 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_p:
                     use_potion(player, show_msg, screen, font, small_font, clock)
+                if event.key == pygame.K_5:
+                    use_strength_potion(player, show_msg, screen, font, small_font, clock)
+                if event.key == pygame.K_6:
+                    use_defense_potion(player, show_msg, screen, font, small_font, clock)
                 if event.key == pygame.K_HOME:
                     player["_current_room"] = current_room
                     player["_visited_rooms"] = {str(k): v for k, v in visited_rooms.items()}
@@ -102,7 +110,7 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
         keys = pygame.key.get_pressed()
         player_moving = False
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            player_world_y = max(40, player_world_y - player_speed)
+            player_world_y = max(80, player_world_y - player_speed)
             player_dir = "up"
             player_moving = True
         elif keys[pygame.K_s] or keys[pygame.K_DOWN]:
@@ -149,6 +157,8 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
         draw_minimap(screen, visited_rooms, current_room, small_font)
         pygame.display.flip()
 
+    from src.ui import fade_screen
+    fade_screen(screen, clock, 'out', speed=10)
     return get_room(current_room, visited_rooms)
 
 # ================= MAIN LOOP =================
@@ -170,10 +180,14 @@ def main():
 
     # Load Assets
     room_bg = pygame.transform.scale(pygame.image.load("assets/overworld/room.png").convert(), (ROOM_W, ROOM_H))
+    shrine_bg = pygame.transform.scale(pygame.image.load("assets/overworld/Shrine_room.png").convert(), (ROOM_W, ROOM_H))
+    trap_bg = pygame.transform.scale(pygame.image.load("assets/overworld/Trap_room.png").convert(), (ROOM_W, ROOM_H))
+    
     battle_bg = pygame.transform.scale(pygame.image.load("assets/battle/background.png").convert(), (SCREEN_W, 400))
     merchant_bg = pygame.transform.scale(pygame.image.load("assets/overworld/merchant.png").convert(), (SCREEN_W, SCREEN_H))
     player_img = pygame.transform.scale(pygame.image.load("assets/battle/player.png").convert_alpha(), (256, 256))
     enemy_img = pygame.transform.scale(pygame.image.load("assets/battle/enemy.png").convert_alpha(), (164, 172))
+    dungeon_lord_img = pygame.transform.scale(pygame.image.load("assets/battle/Dungeon_Lord.png").convert_alpha(), (256, 256))
 
     player_sprites = {
         "up": {
@@ -223,8 +237,8 @@ def main():
 
         if room_type == "boss":
             show_msg(screen, "👑 THE DUNGEON LORD AWAKENS!", font, small_font, clock)
-            fight(screen, player, {"name": "Dungeon Lord", "hp": 350+player["level"]*40, "max_hp": 350+player["level"]*40},
-                  battle_bg, player_img, enemy_img, font, small_font, clock, show_msg, draw_hp_bar, None, flash_sprite, tint_sprite,
+            fight(screen, player, {"name": "Dungeon Lord", "hp": 400+player["level"]*50, "max_hp": 400+player["level"]*50},
+                  battle_bg, player_img, dungeon_lord_img, font, small_font, clock, show_msg, draw_hp_bar, None, flash_sprite, tint_sprite,
                   divine_intervention, gain_xp, use_potion, use_strength_potion, use_defense_potion, 
                   play_battle_music, play_explore_music)
             if player["hp"] > 0: show_msg(screen, "🏆 YOU HAVE CONQUERED THE DUNGEON!", font, small_font, clock)
@@ -239,8 +253,8 @@ def main():
                   play_battle_music, play_explore_music)
             if player["hp"] > 0: visited_rooms[current_room] = "cleared"
         elif room_type == "merchant": merchant_gui(screen, player, merchant_bg, font, small_font, show_msg, clock)
-        elif room_type == "trap": trap(player, screen, font, small_font, clock)
-        elif room_type == "shrine": shrine(player, screen, font, small_font, clock)
+        elif room_type == "trap": trap(player, screen, font, small_font, clock, trap_bg)
+        elif room_type == "shrine": shrine(player, screen, font, small_font, clock, shrine_bg)
 
     if player["hp"] <= 0: show_msg(screen, "☠️ You have perished in the dungeon...", font, small_font, clock)
     show_msg(screen, "✨ Thanks for playing Dungeon Adventure!", font, small_font, clock)

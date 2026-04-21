@@ -6,28 +6,60 @@ from src.constants import SCREEN_W, SCREEN_H, MAP_SIZE, ROOM_W, ROOM_H
 from src.entities import classes, weapons
 
 def draw_hud(screen, player, small_font):
-    """Draws a simple HUD at the top of the screen."""
-    hud_rect = pygame.Rect(0, 0, SCREEN_W, 50)
-    pygame.draw.rect(screen, (32, 32, 32), hud_rect)
-    pygame.draw.line(screen, (200, 200, 200), (0, 50), (SCREEN_W, 50), 3)
+    """Draws an expanded HUD at the top of the screen."""
+    hud_rect = pygame.Rect(0, 0, SCREEN_W, 80)
+    pygame.draw.rect(screen, (24, 24, 24), hud_rect)
+    pygame.draw.line(screen, (200, 200, 200), (0, 80), (SCREEN_W, 80), 3)
 
-    stats = [
+    # Line 1: Basic Stats
+    stats1 = [
         f"HP: {player['hp']}/{player['max_hp']}",
         f"LV: {player['level']}",
-        f"GOLD: {player['gold']}",
-        f"POT: {player['potions']}",
-        f"STR: {player.get('strength_potions', 0)}",
-        f"DEF: {player.get('defense_potions', 0)}"
+        f"FLR: {player['floor']}",
+        f"GOLD: {player['gold']}"
     ]
+    
+    # Line 2: Potions & Shortcuts
+    stats2 = [
+        f"POT(P): {player['potions']}",
+        f"STR(5): {player.get('strength_potions', 0)}",
+        f"DEF(6): {player.get('defense_potions', 0)}",
+        f"SAVE: HOME"
+    ]
+
     x_pos = 30
-    for stat in stats:
+    for stat in stats1:
         txt = small_font.render(stat, True, (255, 255, 255))
         screen.blit(txt, (x_pos, 15))
-        x_pos += 140
+        x_pos += 220
     
-    # Save Hint
-    save_txt = small_font.render("HOME: Save", True, (255, 215, 0))
-    screen.blit(save_txt, (SCREEN_W - 120, 15))
+    x_pos = 30
+    for stat in stats2:
+        txt = small_font.render(stat, True, (200, 200, 200))
+        screen.blit(txt, (x_pos, 45))
+        x_pos += 220
+
+def fade_screen(screen, clock, fade_type='out', speed=5):
+    """Smoothly fades the screen to/from black."""
+    fade_surface = pygame.Surface((SCREEN_W, SCREEN_H))
+    fade_surface.fill((0, 0, 0))
+    
+    if fade_type == 'out':
+        for alpha in range(0, 256, speed):
+            fade_surface.set_alpha(alpha)
+            # We can't easily redraw the whole screen here without passing everything, 
+            # so we just overlay black.
+            screen.blit(fade_surface, (0, 0))
+            pygame.display.flip()
+            clock.tick(60)
+    else:
+        # Fade In requires the screen to have been drawn once
+        for alpha in range(255, -1, -speed):
+            fade_surface.set_alpha(alpha)
+            # This is tricky because we need to redraw the game world under it.
+            # Usually fade in is handled in the main loop. 
+            # For simplicity, we'll focus on fade out which is more important for transitions.
+            pass 
 
 def show_msg(screen, text, font, small_font, clock):
     """Displays a message in a dialogue box and waits for a key press."""
@@ -304,7 +336,8 @@ def merchant_gui(screen, player, merchant_bg, font, small_font, show_msg_func, c
     running = True
     menu_mode = "weapons" # or "potions"
 
-    weapon_items = list(weapons.items())
+    # Filter out Dagger and sort by bonus/price
+    weapon_items = [(n, d) for n, d in weapons.items() if n != "Dagger"]
     potion_items = [
         {"name": "Healing Potion", "price": 25, "key": "potions", "desc": "Restores 40 HP"},
         {"name": "Strength Potion", "price": 100, "key": "strength_potions", "desc": "1.5x Dmg (5 turns)"},
@@ -328,9 +361,25 @@ def merchant_gui(screen, player, merchant_bg, font, small_font, show_msg_func, c
 
         y = 140
         if menu_mode == "weapons":
+            current_bonus = weapons[player["weapon"]]["bonus"]
             for i, (name, data) in enumerate(weapon_items):
-                color = (255, 255, 255) if player['gold'] >= data['price'] else (100, 100, 100)
-                txt = f"{i+1}. {name} (+{data['bonus']} ATK) - {data['price']}g"
+                is_downgrade = data["bonus"] < current_bonus
+                is_owned = name == player["weapon"]
+                
+                if is_owned:
+                    color = (100, 255, 100) # Green for owned
+                    status = "(Equipped)"
+                elif is_downgrade:
+                    color = (255, 100, 100) # Red for downgrade
+                    status = "(Downgrade)"
+                elif player['gold'] >= data['price']:
+                    color = (255, 255, 255)
+                    status = f"- {data['price']}g"
+                else:
+                    color = (100, 100, 100)
+                    status = f"- {data['price']}g"
+
+                txt = f"{i+1}. {name} (+{data['bonus']} ATK) {status}"
                 screen.blit(font.render(txt, True, color), (120, y))
                 y += 40
         else:
@@ -365,7 +414,13 @@ def merchant_gui(screen, player, merchant_bg, font, small_font, show_msg_func, c
                     if menu_mode == "weapons":
                         if idx < len(weapon_items):
                             name, data = weapon_items[idx]
-                            if player["gold"] >= data["price"]:
+                            current_bonus = weapons[player["weapon"]]["bonus"]
+                            
+                            if name == player["weapon"]:
+                                show_msg_func(screen, "🛡️ You already own this weapon!", font, small_font, clock)
+                            elif data["bonus"] < current_bonus:
+                                show_msg_func(screen, "❌ This weapon is weaker than your current one!", font, small_font, clock)
+                            elif player["gold"] >= data["price"]:
                                 player["gold"] -= data["price"]
                                 player["weapon"] = name
                                 show_msg_func(screen, f"⚔️ Purchased {name}!", font, small_font, clock)

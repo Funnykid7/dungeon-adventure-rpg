@@ -43,10 +43,19 @@ def divine_intervention(player, show_msg_func, screen, font, small_font, clock):
 
 def gain_xp(player, amount, show_msg_func, screen, font, small_font, clock):
     player["xp"] += amount
-    if player["xp"] >= player["level"] * 60:
-        player["xp"] = 0
-        player["level"] += 1
-        player["max_hp"] += 10
-        player["hp"] = player["max_hp"]
+    leveled_up = False
+    
+    while True:
+        xp_required = player["level"] * 60
+        if player["xp"] >= xp_required:
+            player["xp"] -= xp_required
+            player["level"] += 1
+            player["max_hp"] += 10
+            player["hp"] = player["max_hp"]
+            leveled_up = True
+        else:
+            break
+            
+    if leveled_up:
         sound("level")
         show_msg_func(screen, f"📈 LEVEL UP! You are now level {player['level']}!", font, small_font, clock)

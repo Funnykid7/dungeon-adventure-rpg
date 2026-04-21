@@ -478,3 +478,54 @@ main {
     .hero-buttons { flex-direction: column; }
     .btn { width: 100%; text-align: center; }
 }
+
+/* Parallax Sections */
+.parallax-section {
+    position: relative;
+    height: 450px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 80px -50vw;
+    left: 50%;
+    right: 50%;
+    width: 100vw;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    overflow: hidden;
+    z-index: 1;
+}
+
+.parallax-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        var(--bg-color) 0%,
+        rgba(5, 7, 10, 0.2) 20%,
+        rgba(5, 7, 10, 0.2) 80%,
+        var(--bg-color) 100%
+    );
+    backdrop-filter: blur(1px);
+}
+
+.parallax-img-1 { background-image: url('../assets/showcase-1.png'); }
+.parallax-img-2 { background-image: url('../assets/showcase-2.png'); }
+.parallax-img-3 { background-image: url('../assets/showcase-3.png'); }
+.parallax-img-4 { background-image: url('../assets/showcase-4.png'); }
+
+@media (max-width: 1024px) {
+    .parallax-section {
+        height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .parallax-section {
+        height: 280px;
+        background-attachment: scroll;
+        margin: 50px -50vw;
+    }
+}
+

@@ -11,12 +11,13 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
           gain_xp_func, use_potion_func, use_strength_potion_func, use_defense_potion_func,
           play_battle_music_func, play_explore_music_func):
     
-    global battle_messages, waiting_for_input
+    global battle_messages, waiting_for_input, skip_timer
     
     play_battle_music_func()
     
     waiting_for_input = False
     battle_messages = []
+    skip_timer = 0
     
     player_flash_timer = 0
     enemy_flash_timer = 0
@@ -24,9 +25,12 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
     running = True
     action = None
     attack_pos = None
+    defense_mode = False
+    enemy_attack_pos = None
 
     while running and enemy["hp"] > 0 and player["hp"] > 0:
         clock.tick(60)
+        current_time = pygame.time.get_ticks()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -35,45 +39,80 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
 
             if event.type == pygame.KEYDOWN:
                 if waiting_for_input:
-                    if battle_messages:
-                        battle_messages.pop(0)
-                    if not battle_messages:
-                        waiting_for_input = False
+                    if current_time > skip_timer:
+                        if battle_messages:
+                            battle_messages.pop(0)
+                            skip_timer = current_time + 800 # 1.5s delay between pops
+                        if not battle_messages:
+                            waiting_for_input = False
+                    continue
+
+                if defense_mode:
+                    if event.key == pygame.K_1:
+                        def_pos = "upper"
+                    elif event.key == pygame.K_2:
+                        def_pos = "middle"
+                    elif event.key == pygame.K_3:
+                        def_pos = "lower"
+                    else: continue
+                    
+                    battle_messages.append(f"You braced for an {def_pos.upper()} attack!")
+                    if def_pos == enemy_attack_pos:
+                        battle_messages.append("🛡️ PERFECT BLOCK! Damage negated!")
+                        enemy_dmg = 0
+                    else:
+                        battle_messages.append(f"❌ Wrong stance! The attack was {enemy_attack_pos.upper()}!")
+                        enemy_dmg = random.randint(12, 22) + player["floor"] * 3
+                        if player.get("defense_turns", 0) > 0:
+                            enemy_dmg = int(enemy_dmg * 0.5)
+                            battle_messages.append("🛡️ Potion reduced the impact!")
+                        if player["class"] == "warrior": enemy_dmg = int(enemy_dmg * 0.8)
+                    
+                    if enemy_dmg > 0:
+                        player["hp"] -= enemy_dmg
+                        player_flash_timer = FLASH_DURATION
+                        battle_messages.append(f"Enemy hit you for {enemy_dmg} damage!")
+                    
+                    defense_mode = False
+                    enemy_attack_pos = None
+                    skip_timer = current_time + 800
                     continue
 
                 if event.key == pygame.K_1:
                     action = "attack"
                     attack_pos = "upper"
-                    battle_messages.append("You used UPPER attack!")
                 elif event.key == pygame.K_2:
                     action = "attack"
                     attack_pos = "middle"
-                    battle_messages.append("You used MIDDLE attack!")
                 elif event.key == pygame.K_3:
                     action = "attack"
                     attack_pos = "lower"
-                    battle_messages.append("You used LOWER attack!")
                 elif event.key == pygame.K_4:
                     if use_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True):
                         action = "potion"
-                        battle_messages.append("You used a potion!")
+                        battle_messages.append("🧪 You used a potion!")
+                        skip_timer = current_time + 800
                 elif event.key == pygame.K_5:
                     if use_strength_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True):
                         action = "potion"
                         battle_messages.append("💪 Strength boosted!")
+                        skip_timer = current_time + 800
                 elif event.key == pygame.K_6:
                     if use_defense_potion_func(player, show_msg_func, screen, font, small_font, clock, in_combat=True):
                         action = "potion"
                         battle_messages.append("🛡️ Defense boosted!")
+                        skip_timer = current_time + 800
 
-                if not battle_messages:
-                    waiting_for_input = False
-
-        if action is not None:
+        if action == "attack":
             battle_messages.clear()
-            if action == "attack":
+            battle_messages.append(f"You used {attack_pos.upper()} attack!")
+            
+            enemy_def_pos = random.choice(["upper", "middle", "lower"])
+            if attack_pos == enemy_def_pos:
+                battle_messages.append(f"🛡️ Enemy blocked your {attack_pos.upper()} attack!")
+            else:
                 dmg = random.randint(*classes[player["class"]]["attack"])
-                dmg += weapons[player["weapon"]]["bonus"] + player["level"] * 2
+                dmg += weapons[player["weapon"]]["bonus"] + player["level"] * 3
                 if player.get("strength_turns", 0) > 0: dmg = int(dmg * 1.5)
                 if player["class"] == "mage" and attack_pos == "upper": dmg = int(dmg * 1.3)
                 if player["class"] == "ranger" and random.random() < 0.25:
@@ -85,37 +124,46 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
 
                 enemy["hp"] -= dmg
                 enemy_flash_timer = FLASH_DURATION
-                battle_messages.append(f"You dealt {dmg} damage!")
-                player["last_attack"] = attack_pos
+                battle_messages.append(f"💥 Dealt {dmg} damage!")
+            
+            player["last_attack"] = attack_pos
+            if player["class"] == "paladin" and player["hp"] > 0 and random.random() < 0.4:
+                heal = random.randint(6, 15)
+                player["hp"] = min(player["max_hp"], player["hp"] + heal)
+                battle_messages.append(f"✨ Paladin heals {heal} HP!")
 
-                if player["class"] == "paladin" and player["hp"] > 0 and random.random() < 0.4:
-                    heal = random.randint(5, 12)
-                    player["hp"] = min(player["max_hp"], player["hp"] + heal)
-                    battle_messages.append(f"Paladin heals {heal} HP!")
-
+            # Prepare Enemy turn
             if enemy["hp"] > 0:
-                enemy_dmg = random.randint(10, 18) + player["floor"] * 2
-                if action == "potion": enemy_dmg = int(enemy_dmg * 0.6)
-                if player.get("defense_turns", 0) > 0:
-                    enemy_dmg = int(enemy_dmg * 0.5)
-                    battle_messages.append("🛡️ Damage reduced!")
-                if player["class"] == "warrior": enemy_dmg = int(enemy_dmg * 0.8)
-                if player["class"] == "rogue" and random.random() < 0.25:
-                    enemy_dmg = 0
-                    battle_messages.append("💨 You dodged the attack!")
-
-                player["hp"] -= enemy_dmg
-                if enemy_dmg > 0:
-                    player_flash_timer = FLASH_DURATION
-                    battle_messages.append(f"Enemy hit you for {enemy_dmg} damage!")
-
+                enemy_attack_pos = random.choice(["upper", "middle", "lower"])
+                defense_mode = True
+            
             player["strength_turns"] = max(0, player.get("strength_turns", 0) - 1)
             player["defense_turns"] = max(0, player.get("defense_turns", 0) - 1)
             action = None
             attack_pos = None
+            skip_timer = current_time + 800
+
+        elif action == "potion":
+            if enemy["hp"] > 0:
+                enemy_attack_pos = random.choice(["upper", "middle", "lower"])
+                defense_mode = True
+            
+            player["strength_turns"] = max(0, player.get("strength_turns", 0) - 1)
+            player["defense_turns"] = max(0, player.get("defense_turns", 0) - 1)
+            action = None
+            skip_timer = current_time + 800
 
         # Draw
         screen.blit(battle_bg, (0, 0))
+        
+        # Player Indicators
+        if player.get("strength_turns", 0) > 0:
+            str_txt = small_font.render(f"STR ↑ ({player['strength_turns']})", True, (255, 100, 100))
+            screen.blit(str_txt, (120, 460))
+        if player.get("defense_turns", 0) > 0:
+            def_txt = small_font.render(f"DEF ↑ ({player['defense_turns']})", True, (100, 100, 255))
+            screen.blit(def_txt, (120, 485))
+
         if player_flash_timer > 0:
             screen.blit(flash_sprite_func(player_img), (120, 200))
             player_flash_timer -= 1
@@ -133,21 +181,33 @@ def fight(screen, player, enemy, battle_bg, player_img, enemy_img, font, small_f
         draw_hp_bar_func(screen, 620, 75, 120, 12, enemy["hp"], enemy["max_hp"], (220, 80, 80))
         screen.blit(font.render(enemy["name"], True, (255,120,120)), (570, 40))
 
-        pygame.draw.rect(screen, (32, 32, 32), (0, SCREEN_H - 140, SCREEN_W, 140))
+        pygame.draw.rect(screen, (20, 20, 20), (0, SCREEN_H - 140, SCREEN_W, 140))
         pygame.draw.rect(screen, (200, 200, 200), (0, SCREEN_H - 140, SCREEN_W, 140), 4)
 
         if battle_messages:
             waiting_for_input = True
             txt = font.render(battle_messages[0], True, (255, 255, 255))
-            screen.blit(txt, (24, SCREEN_H - 110))
+            screen.blit(txt, (30, SCREEN_H - 110))
+            if current_time < skip_timer:
+                wait_txt = small_font.render("Wait...", True, (100, 100, 100))
+                screen.blit(wait_txt, (SCREEN_W - 100, SCREEN_H - 30))
+            else:
+                cont_txt = small_font.render("Press any key to continue", True, (150, 150, 150))
+                screen.blit(cont_txt, (SCREEN_W - 250, SCREEN_H - 30))
         else:
             waiting_for_input = False
 
-        cmd_txt = font.render("     1-Upper   2-Middle   3-Lower   4-Heal   5-Str   6-Def", True, (255, 220, 120))
-        screen.blit(cmd_txt, (24, SCREEN_H - 32))
+        if not waiting_for_input:
+            if defense_mode:
+                cmd_txt = font.render("🛡️ DEFEND! 1-High   2-Mid   3-Low", True, (120, 220, 255))
+            else:
+                cmd_txt = font.render("⚔️ ATTACK! 1-Upper  2-Middle  3-Lower  4-Heal  5-Str  6-Def", True, (255, 220, 120))
+            screen.blit(cmd_txt, (30, SCREEN_H - 45))
+        
         pygame.display.flip()
 
         if player["hp"] <= 0 and divine_intervention_func(player, show_msg_func, screen, font, small_font, clock):
+            battle_messages.append("✨ DIVINE INTERVENTION!")
             continue
 
     if player["hp"] > 0:

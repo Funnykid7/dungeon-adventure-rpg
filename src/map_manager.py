@@ -9,11 +9,11 @@ def generate_floor(floor_num, visited_rooms):
     for x in range(MAP_SIZE):
         for y in range(MAP_SIZE):
             r = random.random()
-            if r < 0.10:
+            if r < 0.15:
                 t = "merchant"
-            elif r < 0.25:
+            elif r < 0.35:
                 t = "trap"
-            elif r < 0.40:
+            elif r < 0.60:
                 t = "shrine"
             else:
                 t = "enemy"
