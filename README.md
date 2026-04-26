@@ -10,14 +10,6 @@ A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural
 
 ---
 
-## 📸 Showcase
-| | |
-|---|---|
-| ![Showcase 1](docs/assets/showcase-1.png) | ![Showcase 2](docs/assets/showcase-2.png) |
-| ![Showcase 3](docs/assets/showcase-3.png) | ![Showcase 4](docs/assets/showcase-4.png) |
-
----
-
 ## Features
 - **6 Playable Classes**: Warrior, Mage, Rogue, Paladin, Ranger, and Monk—each with unique passives and stats.
 - **Dynamic Combat**: A turn-based system featuring critical hits, combos, and healing.

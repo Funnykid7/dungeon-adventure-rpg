@@ -52,7 +52,7 @@ def trap(player, screen, font, small_font, clock, trap_bg):
         player["hp"] -= dmg
         sound("hit")
         show_msg(screen, f"💥 Trap hits you for {dmg} damage!", font, small_font, clock)
-    visited_rooms[current_room] = "cleared"
+    visited_rooms[current_room] = "cleared_trap"
 
 def shrine(player, screen, font, small_font, clock, shrine_bg):
     screen.blit(shrine_bg, (0, 0))
@@ -60,7 +60,7 @@ def shrine(player, screen, font, small_font, clock, shrine_bg):
     player["hp"] = min(player["max_hp"], player["hp"] + heal)
     sound("heal")
     show_msg(screen, f"✨ The ancient shrine heals you for {heal} HP!", font, small_font, clock)
-    visited_rooms[current_room] = "cleared"
+    visited_rooms[current_room] = "cleared_shrine"
 
 def next_floor(player, screen, font, small_font, clock):
     global player_world_x, player_world_y, current_room
@@ -74,7 +74,7 @@ def next_floor(player, screen, font, small_font, clock):
     player_world_x = ROOM_W // 2
     player_world_y = ROOM_H // 2
 
-def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
+def overworld(player, screen, font, small_font, clock, player_sprites, room_bg, trap_bg, shrine_bg):
     global player_world_x, player_world_y, current_room, door_cooldown, entry_dir
     door_cooldown = DOOR_COOLDOWN_TIME
     player_speed = 5
@@ -85,7 +85,17 @@ def overworld(player, screen, font, small_font, clock, player_sprites, room_bg):
     running = True
     while running:
         clock.tick(60)
-        screen.blit(room_bg, (0, 0))
+        
+        # Determine background
+        room_data = visited_rooms.get(current_room)
+        if room_data == "cleared_trap" or room_data == "trap":
+            curr_bg = trap_bg
+        elif room_data == "cleared_shrine" or room_data == "shrine":
+            curr_bg = shrine_bg
+        else:
+            curr_bg = room_bg
+            
+        screen.blit(curr_bg, (0, 0))
         if door_cooldown > 0: door_cooldown -= 1
 
         for event in pygame.event.get():
@@ -225,7 +235,7 @@ def main():
     play_explore_music()
 
     while player["hp"] > 0:
-        room_type = overworld(player, screen, font, small_font, clock, player_sprites, room_bg)
+        room_type = overworld(player, screen, font, small_font, clock, player_sprites, room_bg, trap_bg, shrine_bg)
 
         # Spawning logic
         global entry_dir

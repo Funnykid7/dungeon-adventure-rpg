@@ -62,15 +62,21 @@ def fade_screen(screen, clock, fade_type='out', speed=5):
             pass 
 
 def show_msg(screen, text, font, small_font, clock):
-    """Displays a message in a dialogue box and waits for a key press."""
+    """Displays a message in a dialogue box with a scrolling effect."""
+    visible_chars = 0
+    scroll_speed = 0.5 # Characters per frame
     waiting = True
+    
     while waiting:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN or event.type == pygame.MOUSEBUTTONDOWN:
-                waiting = False
+                if visible_chars < len(text):
+                    visible_chars = len(text)
+                else:
+                    waiting = False
 
         # UI panel
         DIALOGUE_HEIGHT = 140
@@ -79,12 +85,17 @@ def show_msg(screen, text, font, small_font, clock):
         pygame.draw.rect(screen, (200, 200, 200), dialogue_rect, 4)
 
         # Text
-        txt_surface = font.render(text, True, (255, 255, 255))
+        if visible_chars < len(text):
+            visible_chars += scroll_speed
+            
+        current_text = text[:int(visible_chars)]
+        txt_surface = font.render(current_text, True, (255, 255, 255))
         screen.blit(txt_surface, (30, SCREEN_H - 100))
 
         # Prompt
-        prompt = small_font.render("Press any key to continue...", True, (150, 150, 150))
-        screen.blit(prompt, (SCREEN_W - 220, SCREEN_H - 35))
+        if visible_chars >= len(text):
+            prompt = small_font.render("Press any key to continue...", True, (150, 150, 150))
+            screen.blit(prompt, (SCREEN_W - 220, SCREEN_H - 35))
 
         pygame.display.flip()
         clock.tick(60)
@@ -111,7 +122,7 @@ def draw_minimap(screen, visited_rooms, current_room, small_font):
             
             if (x, y) == current_room:
                 color = (255, 255, 0) # Player Current - Yellow
-            elif room_data == "cleared":
+            elif room_data and "cleared" in room_data:
                 color = (80, 80, 80) # Visited/Cleared - Gray
             else:
                 color = (30, 30, 30) # Unvisited - Dark
