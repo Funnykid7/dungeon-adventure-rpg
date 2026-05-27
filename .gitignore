@@ -31,3 +31,24 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Project-specific: save files and runtime data
+dungeon_save.json
+*.json
+
+# Project-specific: dev/internal docs
+history.md
+
+# Claude Code local config
+.claude/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

@@ -14,13 +14,19 @@
 
     <nav class="glass-nav">
         <div class="logo">DUNGEON ADVENTURE</div>
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
             <li><a href="#hero">Home</a></li>
             <li><a href="#features">Features</a></li>
+            <li><a href="#classes">Classes</a></li>
+            <li><a href="#weapons">Weapons</a></li>
             <li><a href="#status">Status</a></li>
             <li><a href="#contribute">Contribute</a></li>
         </ul>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
     </nav>
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
 
     <main>
         <section id="hero" class="glass-hero">
@@ -29,6 +35,26 @@
             <div class="hero-buttons">
                 <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/archive/refs/heads/main.zip" class="btn primary-btn glow-btn">Download Main</a>
                 <a href="https://github.com/Funnykid7/dungeon-adventure-rpg" target="_blank" class="btn secondary-btn glass-btn">GitHub Repo</a>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-bar glass-panel">
+            <div class="stat-item">
+                <span class="stat-number" data-target="6">0</span>
+                <span class="stat-label">Playable Classes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="15">0</span>
+                <span class="stat-label">Unique Enemies</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="4">0</span>
+                <span class="stat-label">Dungeon Floors</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="6">0</span>
+                <span class="stat-label">Weapon Tiers</span>
             </div>
         </section>
 
@@ -78,6 +104,162 @@
         </div>
 
 
+        <!-- Classes Showcase -->
+        <section id="classes">
+            <h2 class="section-title">Choose Your Class</h2>
+            <div class="class-grid">
+
+                <div class="class-card glass-card" style="--class-color: #00f3ff;">
+                    <span class="class-icon">🛡️</span>
+                    <div class="class-name">Warrior</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">150 HP</span>
+                        <span class="class-stat-badge">10–18 ATK</span>
+                    </div>
+                    <div class="class-passive">Forged in iron — takes 20% less damage from all sources.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #a855f7;">
+                    <span class="class-icon">🔮</span>
+                    <div class="class-name">Mage</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">95 HP</span>
+                        <span class="class-stat-badge">13–23 ATK</span>
+                    </div>
+                    <div class="class-passive">Arcane mastery — Upper attacks deal +30% bonus damage.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #22c55e;">
+                    <span class="class-icon">🕵️</span>
+                    <div class="class-name">Rogue</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">115 HP</span>
+                        <span class="class-stat-badge">11–20 ATK</span>
+                    </div>
+                    <div class="class-passive">Shadow step — 25% chance to dodge an enemy attack entirely.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #f59e0b;">
+                    <span class="class-icon">⚜️</span>
+                    <div class="class-name">Paladin</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">160 HP</span>
+                        <span class="class-stat-badge">8–15 ATK</span>
+                    </div>
+                    <div class="class-passive">Holy light — 40% chance to heal 6–15 HP on each hit; once per run, revive at full HP.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #38bdf8;">
+                    <span class="class-icon">🏹</span>
+                    <div class="class-name">Ranger</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">120 HP</span>
+                        <span class="class-stat-badge">12–22 ATK</span>
+                    </div>
+                    <div class="class-passive">Eagle eye — 25% chance to land a critical strike dealing ×1.6 damage.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #fb923c;">
+                    <span class="class-icon">👊</span>
+                    <div class="class-name">Monk</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">110 HP</span>
+                        <span class="class-stat-badge">11–19 ATK</span>
+                    </div>
+                    <div class="class-passive">Flowing strikes — deals ×1.4 damage when repeating the same stance as the previous turn.</div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Weapons Progression -->
+        <section id="weapons">
+            <h2 class="section-title">Weapon Tiers</h2>
+            <div class="weapon-track-wrapper">
+                <div class="weapon-track">
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier I</span>
+                        <span class="weapon-icon">🔪</span>
+                        <span class="weapon-name">Dagger</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">30 Gold</span>
+                            <span class="weapon-bonus">+3 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier II</span>
+                        <span class="weapon-icon">⚔️</span>
+                        <span class="weapon-name">Sword</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">60 Gold</span>
+                            <span class="weapon-bonus">+7 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier III</span>
+                        <span class="weapon-icon">🔨</span>
+                        <span class="weapon-name">Axe</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">100 Gold</span>
+                            <span class="weapon-bonus">+11 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier IV</span>
+                        <span class="weapon-icon">💫</span>
+                        <span class="weapon-name">Magic Staff</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">180 Gold</span>
+                            <span class="weapon-bonus">+16 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier V</span>
+                        <span class="weapon-icon">🔱</span>
+                        <span class="weapon-name">Royal Claymore</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">280 Gold</span>
+                            <span class="weapon-bonus">+21 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card final-tier">
+                        <span class="weapon-tier-badge">Tier VI</span>
+                        <span class="weapon-icon">✨</span>
+                        <span class="weapon-name">Spear of the Sheik</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">400 Gold</span>
+                            <span class="weapon-bonus">+26 Damage</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <p class="weapon-scroll-hint">← swipe to see all tiers →</p>
+        </section>
+
+
+        <div class="parallax-section parallax-img-3">
+            <div class="parallax-overlay"></div>
+        </div>
+
+
         <section id="status" class="glass-panel">
             <h2 class="section-title">Development Status</h2>
             <div class="status-content">
@@ -114,7 +296,7 @@
             </div>
         </section>
 
-        <div class="parallax-section parallax-img-3">
+        <div class="parallax-section parallax-img-4">
             <div class="parallax-overlay"></div>
         </div>
 
@@ -149,10 +331,6 @@
                 </div>
             </div>
         </section>
-
-        <div class="parallax-section parallax-img-4">
-            <div class="parallax-overlay"></div>
-        </div>
     </main>
 
 

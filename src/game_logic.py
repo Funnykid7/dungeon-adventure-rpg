@@ -5,7 +5,7 @@ def use_potion(player, show_msg_func, screen, font, small_font, clock, in_combat
     if player.get("potions", 0) <= 0:
         if not in_combat: show_msg_func(screen, "❌ No potions left.", font, small_font, clock)
         return False
-    heal = 40
+    heal = max(0, 40 - player.get("_curse_potion_reduce", 0))
     player["potions"] -= 1
     player["hp"] = min(player["max_hp"], player["hp"] + heal)
     sound("heal")
@@ -41,10 +41,10 @@ def divine_intervention(player, show_msg_func, screen, font, small_font, clock):
         return True
     return False
 
-def gain_xp(player, amount, show_msg_func, screen, font, small_font, clock):
+def gain_xp(player, amount, show_msg_func, screen, font, small_font, clock, on_levelup=None):
     player["xp"] += amount
     leveled_up = False
-    
+
     while True:
         xp_required = player["level"] * 60
         if player["xp"] >= xp_required:
@@ -55,7 +55,9 @@ def gain_xp(player, amount, show_msg_func, screen, font, small_font, clock):
             leveled_up = True
         else:
             break
-            
+
     if leveled_up:
         sound("level")
         show_msg_func(screen, f"📈 LEVEL UP! You are now level {player['level']}!", font, small_font, clock)
+        if on_levelup:
+            on_levelup()

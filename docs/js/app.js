@@ -1,4 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Hamburger Menu
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinks = document.getElementById('nav-links');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+
+    function closeMenu() {
+        hamburgerBtn.classList.remove('open');
+        navLinks.classList.remove('open');
+        mobileOverlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    hamburgerBtn.addEventListener('click', () => {
+        const isOpen = navLinks.classList.toggle('open');
+        hamburgerBtn.classList.toggle('open', isOpen);
+        mobileOverlay.classList.toggle('open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    mobileOverlay.addEventListener('click', closeMenu);
+
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
     // Tab Logic
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -65,4 +90,32 @@ document.addEventListener('DOMContentLoaded', () => {
         glows[0].style.transform = `translate(${scrolled * 0.1}px, ${scrolled * 0.05}px)`;
         glows[1].style.transform = `translate(-${scrolled * 0.1}px, -${scrolled * 0.05}px)`;
     });
+
+    // Stats Counter Animation
+    function animateCounter(el) {
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1200;
+        const start = performance.now();
+        function step(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.round(eased * target);
+            if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+    }
+
+    const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+    if (statNumbers.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    entry.target.dataset.animated = 'true';
+                    animateCounter(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        statNumbers.forEach(n => observer.observe(n));
+    }
 });
