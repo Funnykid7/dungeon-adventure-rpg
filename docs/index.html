@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dungeon Adventure RPG</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Ambient magical aura in the background -->
+    <div class="ambient-glow cyan"></div>
+    <div class="ambient-glow purple"></div>
+
+    <nav class="glass-nav">
+        <div class="logo">DUNGEON ADVENTURE</div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#classes">Classes</a></li>
+            <li><a href="#weapons">Weapons</a></li>
+            <li><a href="#status">Status</a></li>
+            <li><a href="#contribute">Contribute</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+    <div class="mobile-menu-overlay" id="mobile-overlay"></div>
+
+    <main>
+        <section id="hero" class="glass-hero">
+            <h1 class="glow-text">Dungeon Adventure RPG</h1>
+            <p>A visually immersive, turn-based RPG dungeon crawler built with Python and Pygame.</p>
+            <div class="hero-buttons">
+                <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/archive/refs/heads/main.zip" class="btn primary-btn glow-btn">Download Main</a>
+                <a href="https://github.com/Funnykid7/dungeon-adventure-rpg" target="_blank" class="btn secondary-btn glass-btn">GitHub Repo</a>
+            </div>
+        </section>
+
+        <!-- Stats Bar -->
+        <section class="stats-bar glass-panel">
+            <div class="stat-item">
+                <span class="stat-number" data-target="6">0</span>
+                <span class="stat-label">Playable Classes</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="15">0</span>
+                <span class="stat-label">Unique Enemies</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="4">0</span>
+                <span class="stat-label">Dungeon Floors</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-target="6">0</span>
+                <span class="stat-label">Weapon Tiers</span>
+            </div>
+        </section>
+
+        <div class="parallax-section parallax-img-1">
+            <div class="parallax-overlay"></div>
+        </div>
+
+
+        <section id="features">
+            <h2 class="section-title">Quest Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card glass-card">
+                    <div class="icon">⚔️</div>
+                    <h3>6 Playable Classes</h3>
+                    <p>Choose your hero: Warrior, Mage, Rogue, Paladin, Ranger, or Monk. Each path features unique stats and special passives.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">🎲</div>
+                    <h3>Tactical Combat</h3>
+                    <p>Experience deep, turn-based battles. Utilize upper, middle, and lower attacks alongside critical hits and combos.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">🗺️</div>
+                    <h3>Procedural Paths</h3>
+                    <p>Explore an ever-changing overworld. Traverse rooms filled with enemies, merchants, traps, and ancient shrines.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">💰</div>
+                    <h3>Treasure & Trade</h3>
+                    <p>Amass gold to trade with dungeon merchants. Stock up on vital potions or wield the legendary Royal Claymore.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">💾</div>
+                    <h3>Persistent Progress</h3>
+                    <p>The dungeon never forgets. Use the integrated save/load system to continue your adventure whenever duty calls.</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="icon">🕹️</div>
+                    <h3>Graphical Evolution</h3>
+                    <p>A journey from text-based CLI to a fully immersive Pygame graphical interface with custom UI elements.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="parallax-section parallax-img-2">
+            <div class="parallax-overlay"></div>
+        </div>
+
+
+        <!-- Classes Showcase -->
+        <section id="classes">
+            <h2 class="section-title">Choose Your Class</h2>
+            <div class="class-grid">
+
+                <div class="class-card glass-card" style="--class-color: #00f3ff;">
+                    <span class="class-icon">🛡️</span>
+                    <div class="class-name">Warrior</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">150 HP</span>
+                        <span class="class-stat-badge">10–18 ATK</span>
+                    </div>
+                    <div class="class-passive">Forged in iron — takes 20% less damage from all sources.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #a855f7;">
+                    <span class="class-icon">🔮</span>
+                    <div class="class-name">Mage</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">95 HP</span>
+                        <span class="class-stat-badge">13–23 ATK</span>
+                    </div>
+                    <div class="class-passive">Arcane mastery — Upper attacks deal +30% bonus damage.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #22c55e;">
+                    <span class="class-icon">🕵️</span>
+                    <div class="class-name">Rogue</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">115 HP</span>
+                        <span class="class-stat-badge">11–20 ATK</span>
+                    </div>
+                    <div class="class-passive">Shadow step — 25% chance to dodge an enemy attack entirely.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #f59e0b;">
+                    <span class="class-icon">⚜️</span>
+                    <div class="class-name">Paladin</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">160 HP</span>
+                        <span class="class-stat-badge">8–15 ATK</span>
+                    </div>
+                    <div class="class-passive">Holy light — 40% chance to heal 6–15 HP on each hit; once per run, revive at full HP.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #38bdf8;">
+                    <span class="class-icon">🏹</span>
+                    <div class="class-name">Ranger</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">120 HP</span>
+                        <span class="class-stat-badge">12–22 ATK</span>
+                    </div>
+                    <div class="class-passive">Eagle eye — 25% chance to land a critical strike dealing ×1.6 damage.</div>
+                </div>
+
+                <div class="class-card glass-card" style="--class-color: #fb923c;">
+                    <span class="class-icon">👊</span>
+                    <div class="class-name">Monk</div>
+                    <div class="class-stats">
+                        <span class="class-stat-badge">110 HP</span>
+                        <span class="class-stat-badge">11–19 ATK</span>
+                    </div>
+                    <div class="class-passive">Flowing strikes — deals ×1.4 damage when repeating the same stance as the previous turn.</div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Weapons Progression -->
+        <section id="weapons">
+            <h2 class="section-title">Weapon Tiers</h2>
+            <div class="weapon-track-wrapper">
+                <div class="weapon-track">
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier I</span>
+                        <span class="weapon-icon">🔪</span>
+                        <span class="weapon-name">Dagger</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">30 Gold</span>
+                            <span class="weapon-bonus">+3 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier II</span>
+                        <span class="weapon-icon">⚔️</span>
+                        <span class="weapon-name">Sword</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">60 Gold</span>
+                            <span class="weapon-bonus">+7 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier III</span>
+                        <span class="weapon-icon">🔨</span>
+                        <span class="weapon-name">Axe</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">100 Gold</span>
+                            <span class="weapon-bonus">+11 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier IV</span>
+                        <span class="weapon-icon">💫</span>
+                        <span class="weapon-name">Magic Staff</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">180 Gold</span>
+                            <span class="weapon-bonus">+16 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card">
+                        <span class="weapon-tier-badge">Tier V</span>
+                        <span class="weapon-icon">🔱</span>
+                        <span class="weapon-name">Royal Claymore</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">280 Gold</span>
+                            <span class="weapon-bonus">+21 Damage</span>
+                        </div>
+                    </div>
+
+                    <div class="weapon-connector">▶</div>
+
+                    <div class="weapon-step glass-card final-tier">
+                        <span class="weapon-tier-badge">Tier VI</span>
+                        <span class="weapon-icon">✨</span>
+                        <span class="weapon-name">Spear of the Sheik</span>
+                        <div class="weapon-meta">
+                            <span class="weapon-cost">400 Gold</span>
+                            <span class="weapon-bonus">+26 Damage</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <p class="weapon-scroll-hint">← swipe to see all tiers →</p>
+        </section>
+
+
+        <div class="parallax-section parallax-img-3">
+            <div class="parallax-overlay"></div>
+        </div>
+
+
+        <section id="status" class="glass-panel">
+            <h2 class="section-title">Development Status</h2>
+            <div class="status-content">
+                <div class="status-badge">
+                    <div class="pulse-indicator"></div>
+                    <span>Active Development (BETA)</span>
+                </div>
+                <p>The game is undergoing continuous refinement. While currently in an incomplete development stage, it offers a distinct and playable RPG experience. Community feedback is vital to our journey!</p>
+                
+                <h3 class="status-subtitle">Evolutionary Roadmap</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="dot"></div>
+                        <div class="info">
+                            <strong>Revision 1: The Foundation</strong>
+                            <span>Pure CLI logic and text-based dungeon crawling.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="dot"></div>
+                        <div class="info">
+                            <strong>Revision 2: Atmosphere</strong>
+                            <span>Added original audio tracks and refined class passives.</span>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="dot active"></div>
+                        <div class="info">
+                            <strong>Revision 3: The Vision (Current)</strong>
+                            <span>Full graphical overhaul using Pygame with immersive UI.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="parallax-section parallax-img-4">
+            <div class="parallax-overlay"></div>
+        </div>
+
+
+        <section id="contribute" class="glass-panel">
+            <h2 class="section-title">Join the Adventure</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-target="how-to">How to Help</button>
+                <button class="tab-btn" data-target="issues-list">Bounty Board (Issues)</button>
+            </div>
+            
+            <div class="tab-content active" id="how-to">
+                <p>Dungeon Adventure is an open-source project under the MIT License. We value every contributor's spark!</p>
+                <div class="contribution-cards">
+                    <div class="contrib-card glass-card">
+                        <h4>🎨 Asset Renewal</h4>
+                        <p>We are currently looking for original, open-source sprites and sound effects to replace placeholder assets.</p>
+                        <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/pulls" target="_blank" class="btn glass-btn">Submit Assets</a>
+                    </div>
+                    <div class="contrib-card glass-card">
+                        <h4>🛠️ Bug Hunting</h4>
+                        <p>Spotted a glitch in the dungeon? Report bugs or suggest new features via our GitHub issue tracker.</p>
+                        <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/issues/new" target="_blank" class="btn glass-btn">Report Issue</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="issues-list">
+                <div id="github-issues-container" class="issues-scroll">
+                    <div class="loader"></div>
+                    <p>Consulting the GitHub scrolls...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <footer class="glass-footer">
+        <p>&copy; 2026 Dungeon Adventure RPG Team. Licensed under <a href="https://github.com/Funnykid7/dungeon-adventure-rpg/blob/main/LICENSE" target="_blank">MIT</a>.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
