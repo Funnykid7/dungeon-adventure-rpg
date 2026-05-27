@@ -60,7 +60,8 @@ A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural
 The `legacy/` directory contains the evolutionary steps of this project:
 - **`Revision_1/`**: The original text-based CLI versions of the game. Focuses purely on core RPG logic.
 - **`Revision_2/`**: Added the first audio tracks and refined the class system passives.
-- **`main.py` (Revision 3)**: The current, fully graphical Pygame version.
+- **`Revision_3/`**: The early, fully graphical Pygame version.
+- **`Revision_4/`**: The current, graphical game with qol updates quests and custom sprites.
 
 ---
 
