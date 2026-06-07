@@ -1,5 +1,7 @@
 # 🏰 Dungeon Adventure RPG
 
+### Note: I am busy with other projects so this game wont be updated for a while. I am aware of the bugs and half broken features and will fix them when i have time, your contributions to fix these are welcome.
+
 A visually immersive, turn-based RPG built with **Pygame**. Explore a procedural dungeon, level up your hero, and face off against the powerful Dungeon Lord.
 
 ---
